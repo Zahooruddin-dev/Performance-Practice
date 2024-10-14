@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-const ProductsList = React.lazy(() => {
+const DynamicProductImport = React.lazy(() => {
 	return import('./ProductList');
 });
 function App() {
@@ -34,10 +34,11 @@ function App() {
 			</button>
 			<br />
 			<br />
-			<div className='products-list'>
-        {showProducts}
-        </div>
-
+			<React.Suspense fallback={<h2>loading...</h2>}>
+				<div className='products-list'>
+					{showProducts && <DynamicProductImport />}
+				</div>
+			</React.Suspense>
 		</>
 	);
 }
