@@ -1,11 +1,10 @@
 import React from 'react';
 import './App.css';
-const DynamicProductImport = React.lazy(() => {
-	return import('./ProductList');
-});
-function App() {
+import Product from './Product';
+import productsData from './data';
+export default function App() {
 	const [count, setCount] = React.useState(0);
-	const [showProducts, setShowProducts] = React.useState(false);
+	const [sort, setSort] = React.useState(false);
 
 	function increment() {
 		setCount((prevCount) => prevCount + 1);
@@ -14,6 +13,16 @@ function App() {
 	function decrement() {
 		setCount((prevCount) => prevCount - 1);
 	}
+
+	const sortedProducts = React.useMemo(() => {
+		return [...productsData].sort((a, b) => a.name.localeCompare(b.name));
+	}, [productsData]);
+	const startTime2 = Date.now();
+
+	const endTime2 = Date.now();
+	console.log(`Took ${endTime2 - startTime2}ms`);
+
+	const visibleProducts = sort ? sortedProducts : productsData;
 
 	return (
 		<>
@@ -26,21 +35,16 @@ function App() {
 			</button>
 			<br />
 			<br />
-			<button
-				className='button'
-				onClick={() => setShowProducts((prev) => !prev)}
-			>
-				Show Products
+			<button className='button' onClick={() => setSort((prev) => !prev)}>
+				{sort ? 'Unsort' : 'Sort'}
 			</button>
 			<br />
 			<br />
-			<React.Suspense fallback={<h2>loading...</h2>}>
-				<div className='products-list'>
-					{showProducts && <DynamicProductImport />}
-				</div>
-			</React.Suspense>
+			<div className='products-list'>
+				{visibleProducts.map((product) => (
+					<Product key={product.id} product={product} />
+				))}
+			</div>
 		</>
 	);
 }
-
-export default App;
