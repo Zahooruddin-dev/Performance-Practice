@@ -18,8 +18,15 @@ export default function App() {
 			<button onClick={increment}>+</button>
 			<h2>Count: {count}</h2>
 			<p>App component</p>
-			<GrandParent />
+			<GrandParent valu = {count}/>
 			<GrandParent />
 		</div>
 	);
 }
+
+/**
+ * Play around: what happens when you pass the count to just one
+ * of the `GrandParent` components? What gets re-rendered?
+ * Does it matter if the GrandParent component even uses
+ * that prop that was passed to it?
+ */
